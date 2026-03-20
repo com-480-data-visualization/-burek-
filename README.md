@@ -74,10 +74,10 @@ The datasets used have been widely explored in finance and data communities. On 
 **Why is our approach original ?**
 Existing work often focuses on single assets or narrow comparisons. Our project will create an interactive, multi-asset comparator letting users dynamically select any combination of 10+ assets (crypto, stocks, commodities, real estate) across the period 2014–2024. It emphasizes visual storytelling of risk-return trade-offs and diversification through unified dashboards : normalized growth lines, annual performance bars, correlation heatmaps or Sharpe ratio scatter plots. This holistic, user-driven view is more educational and accessible than static notebooks or blog posts.
 
-**Sources of inspiration.**
+**Sources of inspiration :**
 Portfolio Visualizer (interactive backtesting), TradingView correlation tools, NYT/FT interactive graphics, CoinGecko/Messari dashboards, and Tableau Public finance galleries influenced the interactive filtering, normalized price lines starting from 100, and asset color-coding.
 
-**Previous exploration.**
+**Previous exploration :**
 We have not previously explored these datasets in another course (ML, ADA, or semester project). This is a new project built specifically for this visualization milestone.
 
 ## Milestone 2 (17th April, 5pm)
