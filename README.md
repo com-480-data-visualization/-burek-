@@ -19,9 +19,12 @@ Please, fill the following sections about your project.
 
 ### Dataset
 
-> Find a dataset (or multiple) that you will explore. Assess the quality of the data it contains and how much preprocessing / data-cleaning it will require before tackling visualization. We recommend using a standard dataset as this course is not about scraping nor data processing.
->
-> Hint: some good pointers for finding quality publicly available datasets ([Google dataset search](https://datasetsearch.research.google.com/), [Kaggle](https://www.kaggle.com/datasets), [OpenSwissData](https://opendata.swiss/en/), [SNAP](https://snap.stanford.edu/data/) and [FiveThirtyEight](https://data.fivethirtyeight.com/)).
+This project is an interactive investment comparator visualizing 2014–2024 performance, volatility, and correlations across cryptocurrencies (Bitcoin, Ethereum, Solana) and traditional assets (S&P 500, NASDAQ-100/QQQ, Russell 2000/IWM, Gold, Silver, WTI Oil, US Real Estate via Case-Shiller). It uses four clean, public datasets from Kaggle and official sources, drawing from Yahoo Finance (stocks/ETFs), CoinMarketCap & CoinGecko (crypto), Macrotrends.net & Kitco (gold/silver), EIA (WTI Oil), LBMA/COMEX (metals), and FRED (housing). Preprocessing is minimal: date parsing, year-end extraction, merging, and return/volatility calculations in pandas.
+Cryptocurrency Historical Prices by sudalairajkumar (Kaggle): daily closes for BTC (2013+), ETH (2015+), Solana. → Year-end prices, performance %, volatility; line charts. Very clean; filter years only.
+30-yrs Stock Market Data by asimislam (Kaggle): daily adjusted closes for S&P 500, QQQ, IWM from Yahoo Finance. → Return visualizations and multi-asset comparisons. Minor date/column cleanup.
+Bitcoin, Gold, Oil, S&P 500 by prasertk + Gold and Silver Prices by lbronchal (Kaggle): Gold, Silver, WTI Oil from EIA, LBMA/COMEX, Yahoo Finance. → Volatility heatmaps, inflation-hedge dashboards. Date-merge required.
+Case-Shiller Home Price Index (CSUSHPINSA) from FRED: monthly housing index. → Real-estate cycle charts vs. crypto volatility. Slice December values.
+These datasets enable EDA and visualizations (matplotlib/seaborn, Streamlit) with no scraping and high accuracy from primary sources.
 
 ### Problematic
 
