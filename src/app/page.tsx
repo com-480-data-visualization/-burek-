@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle } from 'lucide-react';
 import InfoTip from '../components/Tooltip';
 import GuidedTour from '../components/GuidedTour';
+import HelpModal from '../components/HelpModal';
 
 interface InvestmentData {
   year: number;
@@ -50,6 +51,7 @@ export default function CryptoComparator() {
   const [selectedInvestments, setSelectedInvestments] = useState<string[]>(['bitcoin', 'ethereum', 'sp500', 'gold', 'cardano', 'chainlink', 'ftse100', 'qqq']);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'crypto' | 'traditional' | 'commodities'>('all');
   const [runTour, setRunTour] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !localStorage.getItem('tour-completed')) {
@@ -358,6 +360,7 @@ export default function CryptoComparator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
       <GuidedTour run={runTour} onFinish={() => setRunTour(false)} />
+      <HelpModal open={showHelp} onClose={() => setShowHelp(false)} onStartTour={() => { localStorage.removeItem('tour-completed'); setRunTour(true); }} />
       <div className="bg-black/20 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -371,6 +374,13 @@ export default function CryptoComparator() {
                 className="text-xs px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 border border-blue-500/30 transition-colors"
               >
                 Take Tour
+              </button>
+              <button
+                onClick={() => setShowHelp(true)}
+                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-gray-400 hover:text-white text-sm font-bold transition-colors flex items-center justify-center"
+                aria-label="Help"
+              >
+                ?
               </button>
             </div>
           </div>
