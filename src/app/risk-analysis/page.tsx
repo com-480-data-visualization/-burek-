@@ -3,8 +3,11 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ArrowLeft, TrendingUp, Shield, AlertTriangle } from 'lucide-react';
 import InfoTip from '../../components/Tooltip';
+
+const CorrelationMatrix = dynamic(() => import('../../components/CorrelationMatrix'), { ssr: false });
 
 interface MonthlyReturns {
   bitcoin: number;
@@ -356,16 +359,8 @@ export default function RiskAnalysis() {
         </div>
 
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold"><InfoTip text="Shows how assets move together. +1 = same direction, -1 = opposite, 0 = independent. Low correlation = better diversification.">Asset Correlation Matrix</InfoTip></h3>
-            <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full font-bold">Preview</span>
-          </div>
-          <div className="rounded-lg overflow-hidden border border-white/10">
-            <img src="/correlation_matrix.png" alt="Correlation Matrix" className="w-full" />
-          </div>
-          <p className="text-gray-500 text-xs mt-3 text-center">
-            Static preview from EDA analysis. Interactive version with dynamic asset filtering and tooltip details coming in final version.
-          </p>
+          <h3 className="text-lg font-bold mb-4"><InfoTip text="Shows how assets move together. +1 = same direction, -1 = opposite, 0 = independent. Low correlation = better diversification.">Asset Correlation Matrix</InfoTip></h3>
+          <CorrelationMatrix />
         </div>
 
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">
