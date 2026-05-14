@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle } from 'lucide-react';
 import InfoTip from '../components/Tooltip';
+import GuidedTour from '../components/GuidedTour';
 
 interface InvestmentData {
   year: number;
@@ -48,6 +49,14 @@ export default function CryptoComparator() {
   const [initialInvestment, setInitialInvestment] = useState<number>(10000);
   const [selectedInvestments, setSelectedInvestments] = useState<string[]>(['bitcoin', 'ethereum', 'sp500', 'gold', 'cardano', 'chainlink', 'ftse100', 'qqq']);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'crypto' | 'traditional' | 'commodities'>('all');
+  const [runTour, setRunTour] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !localStorage.getItem('tour-completed')) {
+      const timer = setTimeout(() => setRunTour(true), 800);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
 
   const performanceData: InvestmentData[] = [
@@ -348,14 +357,21 @@ export default function CryptoComparator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+      <GuidedTour run={runTour} onFinish={() => setRunTour(false)} />
       <div className="bg-black/20 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
               Complete Investment Comparator
             </h1>
-            <div className="text-sm text-gray-400">
-              Compare all assets with real historical data
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-400 hidden sm:inline">Compare all assets with real historical data</span>
+              <button
+                onClick={() => { localStorage.removeItem('tour-completed'); setRunTour(true); }}
+                className="text-xs px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 border border-blue-500/30 transition-colors"
+              >
+                Take Tour
+              </button>
             </div>
           </div>
         </div>
@@ -391,8 +407,8 @@ export default function CryptoComparator() {
     </div>
   </div>
 </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+        <div id="tour-controls" className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div id="tour-investment" className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <label className="block text-sm font-medium text-gray-300 mb-3">
               <InfoTip text="The starting amount you would have invested. All returns are calculated based on this initial sum.">Initial Investment Amount</InfoTip>
             </label>
@@ -407,7 +423,7 @@ export default function CryptoComparator() {
               />
             </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+          <div id="tour-period" className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <label className="block text-sm font-medium text-gray-300 mb-3">
               <InfoTip text="Choose the timeframe for comparison: 1 year, 5 years, or 10 years of historical data.">Analysis Period</InfoTip>
             </label>
@@ -443,7 +459,7 @@ export default function CryptoComparator() {
             </select>
           </div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
+        <div id="tour-assets" className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
           <h3 className="text-xl font-bold mb-6">Select Investments to Compare</h3>
           <div className="mb-8">
             <h4 className="text-lg font-semibold text-blue-400 mb-4 flex items-center gap-2">
@@ -842,7 +858,7 @@ export default function CryptoComparator() {
             </button>
           </div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
+        <div id="tour-chart" className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
           <h3 className="text-xl font-bold mb-4"><InfoTip text="All assets start at base 100 for fair comparison. A value of 300 means the asset tripled in value.">Performance Evolution</InfoTip></h3>
           <div className="flex items-center gap-2 mt-2 mb-2">
             <button
@@ -886,7 +902,7 @@ export default function CryptoComparator() {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div id="tour-results" className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {selectedInvestments.slice(0, 9).map((investmentSymbol) => {
             const investment = investments.find(i => i.symbol === investmentSymbol);
             if (!investment) return null;
@@ -954,7 +970,7 @@ export default function CryptoComparator() {
             );
           })}
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
+        <div id="tour-table" className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
           <h3 className="text-xl font-bold mb-4">Detailed Comparison Table</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -1069,7 +1085,7 @@ export default function CryptoComparator() {
             </div>
           </div>
         </div>
-        <div className="bg-gradient-to-r from-blue-500/20 to-green-500/20 backdrop-blur-sm rounded-xl p-8 border border-blue-500/30 text-center mb-8">
+        <div id="tour-explore" className="bg-gradient-to-r from-blue-500/20 to-green-500/20 backdrop-blur-sm rounded-xl p-8 border border-blue-500/30 text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="bg-blue-500/20 rounded-full p-3">
               <Calculator className="w-8 h-8 text-blue-400" />
