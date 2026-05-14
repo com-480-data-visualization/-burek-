@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle } from 'lucide-react';
+import InfoTip from '../components/Tooltip';
 
 interface InvestmentData {
   year: number;
@@ -393,7 +394,7 @@ export default function CryptoComparator() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <label className="block text-sm font-medium text-gray-300 mb-3">
-              Initial Investment Amount
+              <InfoTip text="The starting amount you would have invested. All returns are calculated based on this initial sum.">Initial Investment Amount</InfoTip>
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
@@ -408,7 +409,7 @@ export default function CryptoComparator() {
           </div>
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <label className="block text-sm font-medium text-gray-300 mb-3">
-              Analysis Period
+              <InfoTip text="Choose the timeframe for comparison: 1 year, 5 years, or 10 years of historical data.">Analysis Period</InfoTip>
             </label>
             <div className="flex gap-2">
               {(['1y', '5y', '10y'] as const).map((period) => (
@@ -842,7 +843,7 @@ export default function CryptoComparator() {
           </div>
         </div>
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
-          <h3 className="text-xl font-bold mb-4">Performance Evolution</h3>
+          <h3 className="text-xl font-bold mb-4"><InfoTip text="All assets start at base 100 for fair comparison. A value of 300 means the asset tripled in value.">Performance Evolution</InfoTip></h3>
           <div className="flex items-center gap-2 mt-2 mb-2">
             <button
               disabled
@@ -924,7 +925,7 @@ export default function CryptoComparator() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-400">Return</p>
+                      <p className="text-sm text-gray-400"><InfoTip text="Total profit or loss as a percentage of your initial investment.">Return</InfoTip></p>
                       <p className={`font-bold ${profitPercentage >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                         {profitPercentage >= 0 ? '+' : ''}{profitPercentage.toFixed(1)}%
                       </p>
@@ -933,7 +934,7 @@ export default function CryptoComparator() {
 
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-sm text-gray-400">Volatility</p>
+                      <p className="text-sm text-gray-400"><InfoTip text="Measures how much the price fluctuates. Higher volatility means more risk but also more potential reward.">Volatility</InfoTip></p>
                       <p className="text-sm text-white">{investment.volatility}%</p>
                     </div>
                     <div className="text-right">
@@ -960,8 +961,8 @@ export default function CryptoComparator() {
               <thead>
                 <tr className="border-b border-white/20">
                   <th className="text-left py-3 px-4">Asset</th>
-                  <th className="text-right py-3 px-4">Return {selectedPeriod}</th>
-                  <th className="text-right py-3 px-4">Volatility</th>
+                  <th className="text-right py-3 px-4"><InfoTip text="Total profit or loss over the selected period, as a percentage.">Return {selectedPeriod}</InfoTip></th>
+                  <th className="text-right py-3 px-4"><InfoTip text="How much the price swings. Higher % = riskier asset.">Volatility</InfoTip></th>
                   <th className="text-right py-3 px-4">Final Value</th>
                   <th className="text-right py-3 px-4">Category</th>
                 </tr>

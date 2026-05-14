@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, Home, Calendar, TrendingUp, Calculator, ArrowLeft, Coins, Activity } from 'lucide-react';
+import InfoTip from '../../components/Tooltip';
 
 interface MonthlyData {
   bitcoin: number;
@@ -233,7 +234,7 @@ export default function DCACalculator() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-center">What is Dollar Cost Averaging?</h2>
+          <h2 className="text-2xl font-bold mb-4 text-center"><InfoTip text="Investing a fixed amount regularly (e.g. $500/month) regardless of price. You buy more when prices are low, less when high — reducing timing risk.">What is Dollar Cost Averaging?</InfoTip></h2>
           <p className="text-center text-gray-300 mb-6">
             DCA is an investment strategy where you invest a fixed amount regularly, regardless of market price.
             This reduces the impact of volatility and can lower your average cost per share over time.
@@ -374,7 +375,7 @@ export default function DCACalculator() {
           <div className="bg-green-500/10 backdrop-blur-sm rounded-xl p-6 border border-green-500/30">
             <div className="flex items-center gap-3 mb-2">
               <DollarSign className="w-6 h-6 text-green-400" />
-              <h3 className="font-bold text-green-400">Total Invested</h3>
+              <h3 className="font-bold text-green-400"><InfoTip text="The sum of all your monthly contributions over the selected period.">Total Invested</InfoTip></h3>
             </div>
             <p className="text-2xl font-bold text-white">${dcaResult.totalInvested.toLocaleString()}</p>
             <p className="text-sm text-gray-300">Over {dcaResult.monthlyData.length} months</p>
@@ -383,7 +384,7 @@ export default function DCACalculator() {
           <div className="bg-blue-500/10 backdrop-blur-sm rounded-xl p-6 border border-blue-500/30">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-6 h-6 text-blue-400" />
-              <h3 className="font-bold text-blue-400">Portfolio Value</h3>
+              <h3 className="font-bold text-blue-400"><InfoTip text="What all your accumulated units are worth at the current market price.">Portfolio Value</InfoTip></h3>
             </div>
             <p className="text-2xl font-bold text-white">${dcaResult.finalValue.toLocaleString()}</p>
             <p className="text-sm text-gray-300">Current market value</p>
@@ -411,7 +412,7 @@ export default function DCACalculator() {
           <div className="bg-purple-500/10 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30">
             <div className="flex items-center gap-3 mb-2">
               <Calculator className="w-6 h-6 text-purple-400" />
-              <h3 className="font-bold text-purple-400">Average Cost</h3>
+              <h3 className="font-bold text-purple-400"><InfoTip text="Your average purchase price per unit. DCA typically lowers this compared to buying all at once.">Average Cost</InfoTip></h3>
             </div>
             <p className="text-2xl font-bold text-white">${dcaResult.averageCost.toLocaleString()}</p>
             <p className="text-sm text-gray-300">

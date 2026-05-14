@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, TrendingUp, Shield, AlertTriangle } from 'lucide-react';
+import InfoTip from '../../components/Tooltip';
 
 interface MonthlyReturns {
   bitcoin: number;
@@ -276,15 +277,15 @@ export default function RiskAnalysis() {
           <p className="text-gray-400 mb-4">Compare assets across three fundamental risk metrics:</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-              <p className="text-white font-medium mb-1">Volatility</p>
+              <p className="text-white font-medium mb-1"><InfoTip text="Standard deviation of returns, annualized. Lower = more stable. Example: 15% volatility means prices typically swing 15% per year.">Volatility</InfoTip></p>
               <p className="text-gray-400 text-sm">Measures the annualized standard deviation of monthly returns. Higher volatility means larger price swings.</p>
             </div>
             <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-              <p className="text-white font-medium mb-1">Sharpe Ratio</p>
+              <p className="text-white font-medium mb-1"><InfoTip text="Risk-adjusted returns. Above 1 = good, above 2 = excellent. A Sharpe of 1.5 means you earned 1.5% extra return for each 1% of risk taken.">Sharpe Ratio</InfoTip></p>
               <p className="text-gray-400 text-sm">Risk-adjusted return metric. Higher values indicate better return per unit of risk taken.</p>
             </div>
             <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-              <p className="text-white font-medium mb-1">Max Drawdown</p>
+              <p className="text-white font-medium mb-1"><InfoTip text="Largest peak-to-trough decline. Shows worst-case scenario. Example: -53% means an investor would have lost over half their value at the worst point.">Max Drawdown</InfoTip></p>
               <p className="text-gray-400 text-sm">The largest peak-to-trough decline observed. Shows the worst-case cumulative loss scenario.</p>
             </div>
           </div>
@@ -331,19 +332,19 @@ export default function RiskAnalysis() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm">Volatility</span>
+                    <span className="text-gray-400 text-sm"><InfoTip text="How much the price swings. Lower = more stable.">Volatility</InfoTip></span>
                     <span className={`font-mono font-medium ${riskLevel.color}`}>
                       {metrics.volatility.toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm">Sharpe Ratio</span>
+                    <span className="text-gray-400 text-sm"><InfoTip text="Return per unit of risk. Above 1 is good, above 2 is excellent.">Sharpe Ratio</InfoTip></span>
                     <span className={`font-mono font-medium ${metrics.sharpeRatio >= 1 ? 'text-green-400' : metrics.sharpeRatio >= 0.5 ? 'text-yellow-400' : 'text-red-400'}`}>
                       {metrics.sharpeRatio.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm">Max Drawdown</span>
+                    <span className="text-gray-400 text-sm"><InfoTip text="Worst drop from peak. Lower is better.">Max Drawdown</InfoTip></span>
                     <span className="font-mono font-medium text-red-400">
                       -{metrics.maxDrawdown.toFixed(1)}%
                     </span>
@@ -356,7 +357,7 @@ export default function RiskAnalysis() {
 
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold">Asset Correlation Matrix</h3>
+            <h3 className="text-lg font-bold"><InfoTip text="Shows how assets move together. +1 = same direction, -1 = opposite, 0 = independent. Low correlation = better diversification.">Asset Correlation Matrix</InfoTip></h3>
             <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full font-bold">Preview</span>
           </div>
           <div className="rounded-lg overflow-hidden border border-white/10">
