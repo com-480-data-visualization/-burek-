@@ -8,6 +8,7 @@ import { ArrowLeft, TrendingUp, Shield, AlertTriangle } from 'lucide-react';
 import InfoTip from '../../components/Tooltip';
 
 const CorrelationMatrix = dynamic(() => import('../../components/CorrelationMatrix'), { ssr: false });
+const RiskReturnScatter = dynamic(() => import('../../components/RiskReturnScatter'), { ssr: false });
 
 interface MonthlyReturns {
   bitcoin: number;
@@ -361,6 +362,11 @@ export default function RiskAnalysis() {
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">
           <h3 className="text-lg font-bold mb-4"><InfoTip text="Shows how assets move together. +1 = same direction, -1 = opposite, 0 = independent. Low correlation = better diversification.">Asset Correlation Matrix</InfoTip></h3>
           <CorrelationMatrix />
+        </div>
+
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">
+          <h3 className="text-lg font-bold mb-4"><InfoTip text="Each point is an asset. X-axis = risk (volatility), Y-axis = average monthly return. Bigger points have better Sharpe ratios (more return per unit of risk). Ideal assets are top-left: high return, low risk.">Risk-Return Analysis</InfoTip></h3>
+          <RiskReturnScatter />
         </div>
 
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">

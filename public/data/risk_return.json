@@ -1,0 +1,102 @@
+{
+  "Bitcoin": {
+    "avgReturn": 1.8582,
+    "volatility": 4.0063,
+    "sharpeRatio": 0.4638
+  },
+  "Ethereum": {
+    "avgReturn": 11.8137,
+    "volatility": 29.5679,
+    "sharpeRatio": 0.3995
+  },
+  "Solana": {
+    "avgReturn": 3.0425,
+    "volatility": 5.4201,
+    "sharpeRatio": 0.5613
+  },
+  "Cardano": {
+    "avgReturn": 1.9282,
+    "volatility": 2.816,
+    "sharpeRatio": 0.6847
+  },
+  "Polygon": {
+    "avgReturn": -0.3181,
+    "volatility": 0.5249,
+    "sharpeRatio": -0.606
+  },
+  "Chainlink": {
+    "avgReturn": 1.4869,
+    "volatility": 2.3478,
+    "sharpeRatio": 0.6333
+  },
+  "Avalanche": {
+    "avgReturn": 0.52,
+    "volatility": 1.7945,
+    "sharpeRatio": 0.2898
+  },
+  "QQQ": {
+    "avgReturn": 0.2008,
+    "volatility": 0.2452,
+    "sharpeRatio": 0.8187
+  },
+  "VTI": {
+    "avgReturn": 0.1174,
+    "volatility": 0.1542,
+    "sharpeRatio": 0.761
+  },
+  "Gold": {
+    "avgReturn": 0.0783,
+    "volatility": 0.1249,
+    "sharpeRatio": 0.6275
+  },
+  "Silver": {
+    "avgReturn": 0.047,
+    "volatility": 0.1765,
+    "sharpeRatio": 0.266
+  },
+  "S&P500": {
+    "avgReturn": 0.1221,
+    "volatility": 0.1535,
+    "sharpeRatio": 0.7957
+  },
+  "Russell2000": {
+    "avgReturn": 0.0716,
+    "volatility": 0.1442,
+    "sharpeRatio": 0.4961
+  },
+  "WTI_Crude": {
+    "avgReturn": -0.0274,
+    "volatility": 0.3872,
+    "sharpeRatio": -0.0708
+  },
+  "Copper": {
+    "avgReturn": 0.0267,
+    "volatility": 0.1964,
+    "sharpeRatio": 0.136
+  },
+  "Natural_Gas": {
+    "avgReturn": -0.1857,
+    "volatility": 0.3033,
+    "sharpeRatio": -0.6125
+  },
+  "FTSE100": {
+    "avgReturn": -0.0102,
+    "volatility": 0.1282,
+    "sharpeRatio": -0.0795
+  },
+  "Nikkei225": {
+    "avgReturn": 0.0398,
+    "volatility": 0.1358,
+    "sharpeRatio": 0.2928
+  },
+  "DAX": {
+    "avgReturn": 0.0156,
+    "volatility": 0.1628,
+    "sharpeRatio": 0.0958
+  },
+  "US_Real_Estate": {
+    "avgReturn": 0.0449,
+    "volatility": 0.1854,
+    "sharpeRatio": 0.2422
+  }
+}
