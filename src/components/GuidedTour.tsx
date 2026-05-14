@@ -80,26 +80,48 @@ export default function GuidedTour({ run, onFinish }: GuidedTourProps) {
       options={{
         backgroundColor: '#1e293b',
         arrowColor: '#1e293b',
-        overlayColor: 'rgba(0, 0, 0, 0.6)',
+        overlayColor: 'rgba(0, 0, 0, 0.7)',
         primaryColor: '#3b82f6',
+        textColor: '#f1f5f9',
         showProgress: true,
         scrollOffset: 100,
         buttons: ['back', 'primary', 'skip'],
       }}
       styles={{
+        tooltip: {
+          backgroundColor: '#1e293b',
+          borderRadius: '12px',
+          padding: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        },
         tooltipTitle: {
-          fontSize: '16px',
+          color: '#ffffff',
+          fontSize: '18px',
           fontWeight: 700,
         },
         tooltipContent: {
+          color: '#e2e8f0',
           fontSize: '14px',
           lineHeight: '1.6',
         },
+        buttonPrimary: {
+          backgroundColor: '#3b82f6',
+          color: '#ffffff',
+          fontSize: '14px',
+          fontWeight: 600,
+          padding: '10px 20px',
+          borderRadius: '8px',
+        },
         buttonBack: {
-          color: '#94a3b8',
+          backgroundColor: '#475569',
+          color: '#ffffff',
+          marginRight: '10px',
+          borderRadius: '8px',
+          padding: '10px 20px',
+          fontSize: '14px',
         },
         buttonSkip: {
-          color: '#64748b',
+          color: '#94a3b8',
         },
       }}
       locale={{
