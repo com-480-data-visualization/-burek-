@@ -11,7 +11,26 @@ interface HistoricalEvent {
   description: string;
   color: string;
   impact: 'bullish' | 'bearish' | 'neutral';
+  marketImpact: string;
 }
+
+const IMPACT_ICONS: Record<string, string> = {
+  bullish: '\u25B2',
+  bearish: '\u25BC',
+  neutral: '\u25C6',
+};
+
+const IMPACT_COLORS: Record<string, string> = {
+  bullish: '#4ade80',
+  bearish: '#f87171',
+  neutral: '#60a5fa',
+};
+
+const IMPACT_LABELS: Record<string, string> = {
+  bullish: 'Bullish',
+  bearish: 'Bearish',
+  neutral: 'Neutral',
+};
 
 const EVENTS: HistoricalEvent[] = [
   {
@@ -22,33 +41,37 @@ const EVENTS: HistoricalEvent[] = [
     description: 'Cryptocurrency ICOs reached peak, Bitcoin hit $20,000',
     color: '#10b981',
     impact: 'bullish',
+    marketImpact: 'Massive cryptocurrency rally. Bitcoin surged 1300% in 2017. Altcoins gained 5000%+ as ICO mania peaked. Many projects raised hundreds of millions in minutes.',
   },
   {
     date: '2020-03-23',
     year: 2020.22,
     label: 'COVID-19 Crash',
     shortLabel: 'COVID',
-    description: 'Global markets crashed due to pandemic, recovery began shortly after',
+    description: 'Global markets crashed due to pandemic',
     color: '#ef4444',
     impact: 'bearish',
+    marketImpact: 'Global panic selling. S&P 500 dropped 34% in 23 days. Bitcoin fell 50% in one day. Central banks responded with massive stimulus, triggering rapid recovery.',
   },
   {
     date: '2021-11-10',
     year: 2021.86,
     label: '2021 Bull Run Peak',
     shortLabel: 'Bull Peak',
-    description: 'Bitcoin reached all-time high of $69,000, crypto market cap exceeded $3T',
+    description: 'Bitcoin reached all-time high of $69,000',
     color: '#10b981',
     impact: 'bullish',
+    marketImpact: 'Crypto market cap exceeded $3 trillion. Bitcoin hit $69k, Ethereum $4.8k. Institutional adoption accelerated. NFT and DeFi boom. Peak euphoria before downturn.',
   },
   {
     date: '2022-05-09',
     year: 2022.36,
     label: 'Terra/Luna Collapse',
     shortLabel: 'Terra Crash',
-    description: 'Major crypto crash triggered by Terra/Luna collapse, $40B wiped out',
+    description: 'Major crypto crash triggered by Terra/Luna',
     color: '#ef4444',
     impact: 'bearish',
+    marketImpact: '$40 billion wiped out in 48 hours. Algorithmic stablecoin UST lost peg. Triggered contagion: lending platforms froze, hedge funds collapsed. Bitcoin fell to $17k.',
   },
   {
     date: '2024-04-20',
@@ -58,12 +81,18 @@ const EVENTS: HistoricalEvent[] = [
     description: 'Bitcoin block reward halved from 6.25 to 3.125 BTC',
     color: '#3b82f6',
     impact: 'neutral',
+    marketImpact: 'Fourth Bitcoin halving event. Mining rewards cut by 50%, reducing new supply. Historically bullish 6-12 months after halving. Market anticipation built for months prior.',
   },
 ];
 
 interface HistoricalEventsProps {
   selectedPeriod: '1y' | '5y' | '10y';
   visible: boolean;
+}
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export default function HistoricalEvents({ selectedPeriod, visible }: HistoricalEventsProps) {
@@ -199,20 +228,39 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
     });
 
     function showTooltip(event: HistoricalEvent, xPos: number) {
-      const tooltipHtml = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-weight:700;font-size:12px;color:${event.color}">${event.label}</span>
-          ${lockedEvent === event.date ? '<span style="cursor:pointer;color:#94a3b8;font-size:14px;margin-left:8px" class="close-btn">&times;</span>' : ''}
-        </div>
-        <div style="font-size:10px;color:#94a3b8;margin-bottom:4px">${event.date}</div>
-        <div style="font-size:11px;color:#e2e8f0;line-height:1.4">${event.description}</div>
-      `;
+      const impactIcon = IMPACT_ICONS[event.impact];
+      const impactColor = IMPACT_COLORS[event.impact];
+      const impactLabel = IMPACT_LABELS[event.impact];
+
+      let left = xPos;
+      let transform = 'translateX(-50%)';
+      if (xPos < 180) {
+        left = xPos - 6;
+        transform = 'translateX(0)';
+      } else if (xPos > dims.width - 180) {
+        left = xPos + 6;
+        transform = 'translateX(-100%)';
+      }
+
       tooltip
         .style('opacity', '1')
-        .style('left', `${xPos}px`)
+        .style('left', `${left}px`)
         .style('top', `${dotY + 22}px`)
-        .style('transform', 'translateX(-50%)')
-        .html(tooltipHtml);
+        .style('transform', transform)
+        .html(`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1)">
+            <span style="font-weight:600;font-size:14px;color:#ffffff">${event.label}</span>
+            <span style="font-size:12px;color:#94a3b8;margin-left:12px;white-space:nowrap">${formatDate(event.date)}</span>
+          </div>
+          <div style="font-size:13px;line-height:1.5;color:#cbd5e1;margin-bottom:10px">${event.description}</div>
+          <div style="background:rgba(255,255,255,0.05);padding:8px 10px;border-radius:6px">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#64748b;margin-bottom:4px;display:flex;align-items:center;gap:6px">
+              Market Impact
+              <span style="color:${impactColor};font-size:11px">${impactIcon} ${impactLabel}</span>
+            </div>
+            <div style="font-size:12px;color:#e2e8f0;line-height:1.5">${event.marketImpact}</div>
+          </div>
+        `);
     }
 
   }, [dims, selectedPeriod, visible, lockedEvent]);
@@ -220,8 +268,6 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
   useEffect(() => {
     if (!lockedEvent) return;
     const handleClick = (e: MouseEvent) => {
-      const container = containerRef.current;
-      if (!container) return;
       const target = e.target as Element;
       if (target.tagName === 'circle') return;
       setLockedEvent(null);
@@ -242,8 +288,17 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
       </svg>
       <div
         ref={tooltipRef}
-        className="absolute pointer-events-none opacity-0 transition-opacity duration-150 bg-black/90 border border-white/20 rounded-lg px-3 py-2 text-white shadow-xl"
-        style={{ maxWidth: '240px', zIndex: 20 }}
+        className="absolute pointer-events-none opacity-0 transition-opacity duration-200 rounded-lg text-white"
+        style={{
+          maxWidth: '320px',
+          minWidth: '260px',
+          zIndex: 20,
+          background: 'rgba(15, 23, 42, 0.95)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          padding: '12px 16px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+          backdropFilter: 'blur(8px)',
+        }}
       />
     </div>
   );
