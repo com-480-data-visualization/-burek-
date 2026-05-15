@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
-import * as d3 from 'd3';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 interface HistoricalEvent {
   date: string;
@@ -96,11 +95,10 @@ function formatDate(dateStr: string): string {
 }
 
 export default function HistoricalEvents({ selectedPeriod, visible }: HistoricalEventsProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ width: 0, height: 0 });
   const [lockedEvent, setLockedEvent] = useState<string | null>(null);
+  const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -115,191 +113,194 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
   }, []);
 
   useEffect(() => {
-    if (!visible) setLockedEvent(null);
+    if (!visible) {
+      setLockedEvent(null);
+      setHoveredEvent(null);
+    }
   }, [visible, selectedPeriod]);
-
-  useEffect(() => {
-    if (!svgRef.current || dims.width === 0 || !visible) {
-      if (svgRef.current) d3.select(svgRef.current).selectAll('*').remove();
-      return;
-    }
-
-    const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
-
-    const startYear = selectedPeriod === '1y' ? 2023 : selectedPeriod === '5y' ? 2019 : 2014;
-    const endYear = 2024;
-
-    const filtered = EVENTS.filter(e => e.year >= startYear && e.year <= endYear);
-    if (filtered.length === 0) return;
-
-    const margin = { left: 65, right: 30 };
-    const chartW = dims.width - margin.left - margin.right;
-    const chartH = dims.height;
-
-    const xScale = d3.scaleLinear()
-      .domain([startYear, endYear])
-      .range([margin.left, margin.left + chartW]);
-
-    svg.attr('width', dims.width).attr('height', chartH);
-
-    const tooltip = d3.select(tooltipRef.current);
-    const dotY = 10;
-
-    const g = svg.append('g');
-
-    filtered.forEach(event => {
-      const xPos = xScale(event.year);
-
-      g.append('line')
-        .attr('x1', xPos).attr('x2', xPos)
-        .attr('y1', dotY + 8).attr('y2', chartH - 30)
-        .attr('stroke', event.color)
-        .attr('stroke-width', 1.5)
-        .attr('stroke-dasharray', '5,5')
-        .attr('opacity', 0.35);
-
-      if (dims.width > 640) {
-        const labelText = event.shortLabel;
-        const labelX = xPos + 12;
-        const labelW = labelText.length * 6.5 + 10;
-
-        g.append('rect')
-          .attr('x', labelX - 5)
-          .attr('y', dotY - 9)
-          .attr('width', labelW)
-          .attr('height', 18)
-          .attr('rx', 4)
-          .attr('fill', 'rgba(0,0,0,0.75)')
-          .attr('stroke', event.color)
-          .attr('stroke-width', 0.5)
-          .attr('opacity', 0.9);
-
-        g.append('text')
-          .attr('x', labelX)
-          .attr('y', dotY + 4)
-          .attr('fill', '#ffffff')
-          .attr('font-size', '10px')
-          .attr('font-weight', '500')
-          .attr('pointer-events', 'none')
-          .text(labelText);
-      }
-
-      const circle = g.append('circle')
-        .attr('cx', xPos)
-        .attr('cy', dotY)
-        .attr('r', lockedEvent === event.date ? 9 : 6)
-        .attr('fill', event.color)
-        .attr('stroke', '#ffffff')
-        .attr('stroke-width', lockedEvent === event.date ? 3 : 2)
-        .attr('opacity', 0.9)
-        .style('cursor', 'pointer');
-
-      circle
-        .on('mouseenter', function () {
-          if (lockedEvent && lockedEvent !== event.date) return;
-          d3.select(this).attr('r', 8).attr('opacity', 1);
-          if (!lockedEvent) {
-            showTooltip(event, xPos);
-          }
-        })
-        .on('mouseleave', function () {
-          if (lockedEvent === event.date) {
-            d3.select(this).attr('r', 9);
-            return;
-          }
-          d3.select(this).attr('r', 6).attr('opacity', 0.9);
-          if (!lockedEvent) {
-            tooltip.style('opacity', '0');
-          }
-        })
-        .on('click', function () {
-          if (lockedEvent === event.date) {
-            setLockedEvent(null);
-            tooltip.style('opacity', '0');
-            d3.select(this).attr('r', 6).attr('stroke-width', 2);
-          } else {
-            setLockedEvent(event.date);
-            showTooltip(event, xPos);
-            g.selectAll('circle').attr('r', 6).attr('stroke-width', 2);
-            d3.select(this).attr('r', 9).attr('stroke-width', 3);
-          }
-        });
-    });
-
-    function showTooltip(event: HistoricalEvent, xPos: number) {
-      const impactIcon = IMPACT_ICONS[event.impact];
-      const impactColor = IMPACT_COLORS[event.impact];
-      const impactLabel = IMPACT_LABELS[event.impact];
-
-      let left = xPos;
-      let transform = 'translateX(-50%)';
-      if (xPos < 180) {
-        left = xPos - 6;
-        transform = 'translateX(0)';
-      } else if (xPos > dims.width - 180) {
-        left = xPos + 6;
-        transform = 'translateX(-100%)';
-      }
-
-      tooltip
-        .style('opacity', '1')
-        .style('left', `${left}px`)
-        .style('top', `${dotY + 22}px`)
-        .style('transform', transform)
-        .html(`
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1)">
-            <span style="font-weight:600;font-size:14px;color:#ffffff">${event.label}</span>
-            <span style="font-size:12px;color:#94a3b8;margin-left:12px;white-space:nowrap">${formatDate(event.date)}</span>
-          </div>
-          <div style="font-size:13px;line-height:1.5;color:#cbd5e1;margin-bottom:10px">${event.description}</div>
-          <div style="background:rgba(255,255,255,0.05);padding:8px 10px;border-radius:6px">
-            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#64748b;margin-bottom:4px;display:flex;align-items:center;gap:6px">
-              Market Impact
-              <span style="color:${impactColor};font-size:11px">${impactIcon} ${impactLabel}</span>
-            </div>
-            <div style="font-size:12px;color:#e2e8f0;line-height:1.5">${event.marketImpact}</div>
-          </div>
-        `);
-    }
-
-  }, [dims, selectedPeriod, visible, lockedEvent]);
 
   useEffect(() => {
     if (!lockedEvent) return;
     const handleClick = (e: MouseEvent) => {
-      const target = e.target as Element;
-      if (target.tagName === 'circle') return;
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-event-dot]')) return;
       setLockedEvent(null);
-      if (tooltipRef.current) {
-        d3.select(tooltipRef.current).style('opacity', '0');
-      }
     };
     document.addEventListener('click', handleClick);
     return () => document.removeEventListener('click', handleClick);
   }, [lockedEvent]);
 
-  if (!visible) return null;
+  const startYear = selectedPeriod === '1y' ? 2023 : selectedPeriod === '5y' ? 2019 : 2014;
+  const endYear = 2024;
+  const margin = { left: 65, right: 30 };
+
+  const getXPos = useCallback((year: number) => {
+    if (dims.width === 0) return 0;
+    const chartW = dims.width - margin.left - margin.right;
+    return margin.left + ((year - startYear) / (endYear - startYear)) * chartW;
+  }, [dims.width, startYear]);
+
+  if (!visible || dims.width === 0) return null;
+
+  const filtered = EVENTS.filter(e => e.year >= startYear && e.year <= endYear);
+  if (filtered.length === 0) return null;
+
+  const activeEvent = lockedEvent || hoveredEvent;
+  const activeData = activeEvent ? filtered.find(e => e.date === activeEvent) : null;
+  const activeXPos = activeData ? getXPos(activeData.year) : 0;
+
+  const dotY = 10;
+
+  let tooltipLeft = activeXPos;
+  let tooltipTransform = 'translateX(-50%)';
+  if (activeXPos < 180) {
+    tooltipLeft = activeXPos - 6;
+    tooltipTransform = 'translateX(0)';
+  } else if (activeXPos > dims.width - 180) {
+    tooltipLeft = activeXPos + 6;
+    tooltipTransform = 'translateX(-100%)';
+  }
 
   return (
-    <div ref={containerRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
-      <svg ref={svgRef} className="absolute inset-0 pointer-events-none" style={{ overflow: 'visible' }}>
-        <style>{`svg circle, svg rect { pointer-events: all; }`}</style>
+    <div ref={containerRef} className="absolute inset-0" style={{ zIndex: 10, pointerEvents: 'none' }}>
+      {/* SVG for dashed lines only */}
+      <svg
+        width={dims.width}
+        height={dims.height}
+        className="absolute inset-0"
+        style={{ pointerEvents: 'none' }}
+      >
+        {filtered.map(event => {
+          const xPos = getXPos(event.year);
+          return (
+            <line
+              key={event.date}
+              x1={xPos} x2={xPos}
+              y1={dotY + 8} y2={dims.height - 30}
+              stroke={event.color}
+              strokeWidth={1.5}
+              strokeDasharray="5,5"
+              opacity={0.35}
+            />
+          );
+        })}
       </svg>
-      <div
-        ref={tooltipRef}
-        className="absolute pointer-events-none opacity-0 transition-opacity duration-200 rounded-lg text-white"
-        style={{
-          maxWidth: '320px',
-          minWidth: '260px',
-          zIndex: 20,
-          background: 'rgba(15, 23, 42, 0.95)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          padding: '12px 16px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-          backdropFilter: 'blur(8px)',
-        }}
-      />
+
+      {/* React DOM dots + labels (reliable pointer events) */}
+      {filtered.map(event => {
+        const xPos = getXPos(event.year);
+        const isLocked = lockedEvent === event.date;
+        const isHovered = hoveredEvent === event.date;
+        const isActive = isLocked || isHovered;
+        const r = isLocked ? 9 : isActive ? 8 : 6;
+
+        return (
+          <div
+            key={event.date}
+            data-event-dot
+            style={{
+              position: 'absolute',
+              left: xPos,
+              top: dotY,
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'auto',
+              cursor: 'pointer',
+              zIndex: 100,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (lockedEvent === event.date) {
+                setLockedEvent(null);
+              } else {
+                setLockedEvent(event.date);
+              }
+            }}
+            onMouseEnter={() => {
+              if (!lockedEvent) setHoveredEvent(event.date);
+            }}
+            onMouseLeave={() => {
+              if (!lockedEvent) setHoveredEvent(null);
+            }}
+          >
+            <svg width={r * 2 + 6} height={r * 2 + 6} style={{ overflow: 'visible', flexShrink: 0 }}>
+              {isLocked && (
+                <circle
+                  cx={r + 3} cy={r + 3} r={r + 3}
+                  fill="transparent"
+                  stroke={event.color}
+                  strokeWidth={1.5}
+                  opacity={0.4}
+                />
+              )}
+              <circle
+                cx={r + 3} cy={r + 3} r={r}
+                fill={event.color}
+                stroke="#ffffff"
+                strokeWidth={isLocked ? 3 : 2}
+                opacity={isActive ? 1 : 0.9}
+              />
+            </svg>
+
+            {dims.width > 640 && (
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 500,
+                  color: '#ffffff',
+                  background: 'rgba(0,0,0,0.75)',
+                  border: `0.5px solid ${event.color}`,
+                  borderRadius: '4px',
+                  padding: '2px 6px',
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'auto',
+                }}
+              >
+                {event.shortLabel}
+              </span>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Tooltip */}
+      {activeData && (
+        <div
+          style={{
+            position: 'absolute',
+            left: tooltipLeft,
+            top: dotY + 26,
+            transform: tooltipTransform,
+            maxWidth: '320px',
+            minWidth: '260px',
+            zIndex: 200,
+            background: 'rgba(15, 23, 42, 0.95)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            backdropFilter: 'blur(8px)',
+            pointerEvents: lockedEvent ? 'auto' : 'none',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '8px', marginBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+            <span style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff' }}>{activeData.label}</span>
+            <span style={{ fontSize: '12px', color: '#94a3b8', marginLeft: '12px', whiteSpace: 'nowrap' }}>{formatDate(activeData.date)}</span>
+          </div>
+          <div style={{ fontSize: '13px', lineHeight: 1.5, color: '#cbd5e1', marginBottom: '10px' }}>{activeData.description}</div>
+          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px 10px', borderRadius: '6px' }}>
+            <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#64748b', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              Market Impact
+              <span style={{ color: IMPACT_COLORS[activeData.impact], fontSize: '11px' }}>
+                {IMPACT_ICONS[activeData.impact]} {IMPACT_LABELS[activeData.impact]}
+              </span>
+            </div>
+            <div style={{ fontSize: '12px', color: '#e2e8f0', lineHeight: 1.5 }}>{activeData.marketImpact}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
