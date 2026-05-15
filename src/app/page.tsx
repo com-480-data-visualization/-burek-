@@ -5,9 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import InfoTip from '../components/Tooltip';
 import GuidedTour from '../components/GuidedTour';
 import HelpModal from '../components/HelpModal';
+
+const HistoricalEvents = dynamic(() => import('../components/HistoricalEvents'), { ssr: false });
 
 interface InvestmentData {
   year: number;
@@ -52,6 +55,7 @@ export default function CryptoComparator() {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'crypto' | 'traditional' | 'commodities'>('all');
   const [runTour, setRunTour] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showEvents, setShowEvents] = useState(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !localStorage.getItem('tour-completed')) {
@@ -872,27 +876,31 @@ export default function CryptoComparator() {
           <h3 className="text-xl font-bold mb-4"><InfoTip text="All assets start at base 100 for fair comparison. A value of 300 means the asset tripled in value.">Performance Evolution</InfoTip></h3>
           <div className="flex items-center gap-2 mt-2 mb-2">
             <button
-              disabled
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-500 cursor-not-allowed text-sm"
-              title="Event annotations (2017 ICO boom, 2020 COVID, 2021 bull run, 2022 bear) coming in final version"
+              onClick={() => setShowEvents(v => !v)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm transition-all ${
+                showEvents
+                  ? 'bg-blue-500/20 border-blue-500/30 text-blue-300'
+                  : 'bg-white/5 border-white/10 text-gray-500 hover:text-gray-300'
+              }`}
+              aria-pressed={showEvents}
+              aria-label="Toggle historical event markers on chart"
             >
               <Activity className="w-4 h-4" />
-              Show Historical Events
-              <span className="text-xs px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">Soon</span>
+              Historical Events
             </button>
           </div>
-          <div className="h-96">
+          <div className="h-96 relative">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={getFilteredData()}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="year" stroke="#9CA3AF" />
                 <YAxis stroke="#9CA3AF" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(0,0,0,0.8)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(0,0,0,0.8)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '8px'
-                  }} 
+                  }}
                 />
                 <Legend />
                 {selectedInvestments.map((investment) => {
@@ -910,6 +918,7 @@ export default function CryptoComparator() {
                 })}
               </LineChart>
             </ResponsiveContainer>
+            <HistoricalEvents selectedPeriod={selectedPeriod} visible={showEvents} />
           </div>
         </div>
         <div id="tour-results" className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
