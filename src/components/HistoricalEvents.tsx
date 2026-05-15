@@ -101,16 +101,15 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    const parent = containerRef.current.parentElement;
-    if (!parent) return;
+    const el = containerRef.current;
+    if (!el) return;
     const obs = new ResizeObserver(entries => {
       const { width, height } = entries[0].contentRect;
       setDims({ width, height });
     });
-    obs.observe(parent);
+    obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [visible]);
 
   useEffect(() => {
     if (!visible) {
@@ -140,10 +139,8 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
     return margin.left + ((year - startYear) / (endYear - startYear)) * chartW;
   }, [dims.width, startYear]);
 
-  if (!visible || dims.width === 0) return null;
-
   const filtered = EVENTS.filter(e => e.year >= startYear && e.year <= endYear);
-  if (filtered.length === 0) return null;
+  const shouldRender = visible && dims.width > 0 && filtered.length > 0;
 
   const activeEvent = lockedEvent || hoveredEvent;
   const activeData = activeEvent ? filtered.find(e => e.date === activeEvent) : null;
@@ -163,6 +160,7 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
 
   return (
     <div ref={containerRef} className="absolute inset-0" style={{ zIndex: 10, pointerEvents: 'none' }}>
+      {!shouldRender ? null : <>
       {/* SVG for dashed lines only */}
       <svg
         width={dims.width}
@@ -301,6 +299,7 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
           </div>
         </div>
       )}
+      </>}
     </div>
   );
 }
