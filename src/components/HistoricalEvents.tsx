@@ -110,29 +110,31 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
     filtered.forEach(event => {
       const xPos = xScale(event.year);
 
+      const dotY = 8;
+
       g.append('line')
         .attr('x1', xPos).attr('x2', xPos)
-        .attr('y1', 20).attr('y2', chartH - 30)
+        .attr('y1', dotY + 6).attr('y2', chartH - 30)
         .attr('stroke', event.color)
         .attr('stroke-width', 1.5)
         .attr('stroke-dasharray', '5,5')
-        .attr('opacity', 0.5);
+        .attr('opacity', 0.4);
 
       g.append('circle')
         .attr('cx', xPos)
-        .attr('cy', 14)
+        .attr('cy', dotY)
         .attr('r', 6)
         .attr('fill', event.color)
         .attr('stroke', '#ffffff')
         .attr('stroke-width', 2)
         .attr('opacity', 0.9)
         .style('cursor', 'pointer')
-        .on('mouseenter', function (mouseEvent) {
+        .on('mouseenter', function () {
           d3.select(this).attr('r', 8).attr('opacity', 1);
           tooltip
             .style('opacity', '1')
             .style('left', `${xPos}px`)
-            .style('top', '28px')
+            .style('top', `${dotY + 18}px`)
             .style('transform', 'translateX(-50%)')
             .html(`
               <div style="font-weight:700;font-size:12px;color:${event.color};margin-bottom:3px">${event.label}</div>
@@ -143,17 +145,6 @@ export default function HistoricalEvents({ selectedPeriod, visible }: Historical
           d3.select(this).attr('r', 6).attr('opacity', 0.9);
           tooltip.style('opacity', '0');
         });
-
-      if (dims.width > 640) {
-        g.append('text')
-          .attr('x', xPos)
-          .attr('y', chartH - 12)
-          .attr('text-anchor', 'middle')
-          .attr('fill', event.color)
-          .attr('font-size', '9px')
-          .attr('opacity', 0.7)
-          .text(event.label);
-      }
     });
 
   }, [dims, selectedPeriod, visible]);
