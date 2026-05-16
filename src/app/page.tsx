@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle, Download, Loader2 } from 'lucide-react';
+import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle, Download, Loader2, Play } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import InfoTip from '../components/Tooltip';
 import GuidedTour from '../components/GuidedTour';
@@ -1247,6 +1247,43 @@ export default function CryptoComparator() {
           >
             <Building2 className="w-5 h-5" />
             Launch Portfolio Optimizer
+          </Link>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-xl p-8 border border-purple-500/30 text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="bg-purple-500/20 rounded-full p-3">
+              <Play className="w-8 h-8 text-purple-400" />
+            </div>
+            <h3 className="text-2xl font-bold">Asset Evolution Timeline</h3>
+          </div>
+          <p className="text-gray-300 mb-6 max-w-3xl mx-auto">
+            Watch how 21 assets evolved over a decade in an animated Hans Rosling-style bubble chart.
+            See risk vs return dynamics unfold year by year from 2014 to 2024.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-purple-500/10 rounded-lg p-4">
+              <div className="text-2xl mb-2">🫧</div>
+              <h4 className="font-bold text-purple-400 mb-2">Animated Bubbles</h4>
+              <p className="text-sm text-gray-300">Size = return magnitude, position = risk/reward</p>
+            </div>
+            <div className="bg-pink-500/10 rounded-lg p-4">
+              <div className="text-2xl mb-2">⏱️</div>
+              <h4 className="font-bold text-pink-400 mb-2">Year-by-Year</h4>
+              <p className="text-sm text-gray-300">Play, pause, scrub through 11 years of data</p>
+            </div>
+            <div className="bg-fuchsia-500/10 rounded-lg p-4">
+              <div className="text-2xl mb-2">🛤️</div>
+              <h4 className="font-bold text-fuchsia-400 mb-2">Trail Tracking</h4>
+              <p className="text-sm text-gray-300">Click any asset to trace its path over time</p>
+            </div>
+          </div>
+          <Link
+            href="/asset-evolution"
+            className="inline-flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg"
+          >
+            <Play className="w-5 h-5" />
+            Watch Asset Evolution
           </Link>
         </div>
 

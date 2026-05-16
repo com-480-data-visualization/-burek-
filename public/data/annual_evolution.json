@@ -1,0 +1,330 @@
+[
+  {
+    "name": "Bitcoin",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2014, "return": -0.58, "volatility": 0.65 },
+      { "year": 2015, "return": 0.35, "volatility": 0.62 },
+      { "year": 2016, "return": 1.25, "volatility": 0.48 },
+      { "year": 2017, "return": 13.18, "volatility": 0.82 },
+      { "year": 2018, "return": -0.73, "volatility": 0.78 },
+      { "year": 2019, "return": 0.92, "volatility": 0.55 },
+      { "year": 2020, "return": 3.05, "volatility": 0.63 },
+      { "year": 2021, "return": 0.60, "volatility": 0.61 },
+      { "year": 2022, "return": -0.64, "volatility": 0.58 },
+      { "year": 2023, "return": 1.56, "volatility": 0.47 },
+      { "year": 2024, "return": 1.22, "volatility": 0.45 }
+    ]
+  },
+  {
+    "name": "Ethereum",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2016, "return": 7.51, "volatility": 0.85 },
+      { "year": 2017, "return": 87.26, "volatility": 1.05 },
+      { "year": 2018, "return": -0.82, "volatility": 0.92 },
+      { "year": 2019, "return": -0.03, "volatility": 0.68 },
+      { "year": 2020, "return": 4.70, "volatility": 0.75 },
+      { "year": 2021, "return": 3.99, "volatility": 0.72 },
+      { "year": 2022, "return": -0.68, "volatility": 0.74 },
+      { "year": 2023, "return": 0.91, "volatility": 0.52 },
+      { "year": 2024, "return": 0.40, "volatility": 0.55 }
+    ]
+  },
+  {
+    "name": "Solana",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2020, "return": 35.40, "volatility": 1.20 },
+      { "year": 2021, "return": 111.00, "volatility": 1.35 },
+      { "year": 2022, "return": -0.94, "volatility": 1.10 },
+      { "year": 2023, "return": 8.20, "volatility": 0.95 },
+      { "year": 2024, "return": 0.86, "volatility": 0.78 }
+    ]
+  },
+  {
+    "name": "Cardano",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2018, "return": -0.95, "volatility": 1.05 },
+      { "year": 2019, "return": 0.50, "volatility": 0.72 },
+      { "year": 2020, "return": 4.50, "volatility": 0.85 },
+      { "year": 2021, "return": 6.40, "volatility": 0.92 },
+      { "year": 2022, "return": -0.81, "volatility": 0.78 },
+      { "year": 2023, "return": 1.36, "volatility": 0.65 },
+      { "year": 2024, "return": 0.47, "volatility": 0.72 }
+    ]
+  },
+  {
+    "name": "Polygon",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2020, "return": 0.29, "volatility": 1.10 },
+      { "year": 2021, "return": 131.00, "volatility": 1.45 },
+      { "year": 2022, "return": -0.68, "volatility": 1.00 },
+      { "year": 2023, "return": 0.25, "volatility": 0.72 },
+      { "year": 2024, "return": -0.52, "volatility": 0.68 }
+    ]
+  },
+  {
+    "name": "Chainlink",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2018, "return": -0.55, "volatility": 0.88 },
+      { "year": 2019, "return": 5.10, "volatility": 0.95 },
+      { "year": 2020, "return": 6.50, "volatility": 1.02 },
+      { "year": 2021, "return": 0.58, "volatility": 0.80 },
+      { "year": 2022, "return": -0.75, "volatility": 0.72 },
+      { "year": 2023, "return": 1.77, "volatility": 0.62 },
+      { "year": 2024, "return": 0.46, "volatility": 0.65 }
+    ]
+  },
+  {
+    "name": "Avalanche",
+    "category": "crypto",
+    "timeline": [
+      { "year": 2021, "return": 24.34, "volatility": 1.30 },
+      { "year": 2022, "return": -0.89, "volatility": 1.05 },
+      { "year": 2023, "return": 2.45, "volatility": 0.82 },
+      { "year": 2024, "return": 0.05, "volatility": 0.78 }
+    ]
+  },
+  {
+    "name": "S&P 500",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.114, "volatility": 0.09 },
+      { "year": 2015, "return": -0.007, "volatility": 0.12 },
+      { "year": 2016, "return": 0.095, "volatility": 0.10 },
+      { "year": 2017, "return": 0.195, "volatility": 0.06 },
+      { "year": 2018, "return": -0.062, "volatility": 0.15 },
+      { "year": 2019, "return": 0.289, "volatility": 0.12 },
+      { "year": 2020, "return": 0.162, "volatility": 0.25 },
+      { "year": 2021, "return": 0.268, "volatility": 0.13 },
+      { "year": 2022, "return": -0.194, "volatility": 0.22 },
+      { "year": 2023, "return": 0.242, "volatility": 0.13 },
+      { "year": 2024, "return": 0.250, "volatility": 0.12 }
+    ]
+  },
+  {
+    "name": "NASDAQ",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.133, "volatility": 0.11 },
+      { "year": 2015, "return": 0.056, "volatility": 0.14 },
+      { "year": 2016, "return": 0.076, "volatility": 0.12 },
+      { "year": 2017, "return": 0.282, "volatility": 0.08 },
+      { "year": 2018, "return": -0.037, "volatility": 0.18 },
+      { "year": 2019, "return": 0.354, "volatility": 0.14 },
+      { "year": 2020, "return": 0.434, "volatility": 0.30 },
+      { "year": 2021, "return": 0.214, "volatility": 0.16 },
+      { "year": 2022, "return": -0.331, "volatility": 0.28 },
+      { "year": 2023, "return": 0.434, "volatility": 0.16 },
+      { "year": 2024, "return": 0.313, "volatility": 0.15 }
+    ]
+  },
+  {
+    "name": "Russell 2000",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.036, "volatility": 0.13 },
+      { "year": 2015, "return": -0.058, "volatility": 0.15 },
+      { "year": 2016, "return": 0.198, "volatility": 0.14 },
+      { "year": 2017, "return": 0.133, "volatility": 0.10 },
+      { "year": 2018, "return": -0.121, "volatility": 0.18 },
+      { "year": 2019, "return": 0.237, "volatility": 0.15 },
+      { "year": 2020, "return": 0.197, "volatility": 0.32 },
+      { "year": 2021, "return": 0.134, "volatility": 0.18 },
+      { "year": 2022, "return": -0.216, "volatility": 0.24 },
+      { "year": 2023, "return": 0.151, "volatility": 0.17 },
+      { "year": 2024, "return": 0.100, "volatility": 0.16 }
+    ]
+  },
+  {
+    "name": "FTSE 100",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": -0.028, "volatility": 0.10 },
+      { "year": 2015, "return": -0.048, "volatility": 0.13 },
+      { "year": 2016, "return": 0.143, "volatility": 0.16 },
+      { "year": 2017, "return": 0.076, "volatility": 0.08 },
+      { "year": 2018, "return": -0.124, "volatility": 0.12 },
+      { "year": 2019, "return": 0.121, "volatility": 0.11 },
+      { "year": 2020, "return": -0.143, "volatility": 0.26 },
+      { "year": 2021, "return": 0.143, "volatility": 0.12 },
+      { "year": 2022, "return": 0.009, "volatility": 0.14 },
+      { "year": 2023, "return": 0.038, "volatility": 0.10 },
+      { "year": 2024, "return": 0.057, "volatility": 0.09 }
+    ]
+  },
+  {
+    "name": "Nikkei 225",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.073, "volatility": 0.18 },
+      { "year": 2015, "return": 0.091, "volatility": 0.20 },
+      { "year": 2016, "return": 0.004, "volatility": 0.22 },
+      { "year": 2017, "return": 0.192, "volatility": 0.12 },
+      { "year": 2018, "return": -0.121, "volatility": 0.18 },
+      { "year": 2019, "return": 0.183, "volatility": 0.14 },
+      { "year": 2020, "return": 0.160, "volatility": 0.25 },
+      { "year": 2021, "return": 0.049, "volatility": 0.15 },
+      { "year": 2022, "return": -0.093, "volatility": 0.19 },
+      { "year": 2023, "return": 0.282, "volatility": 0.14 },
+      { "year": 2024, "return": 0.192, "volatility": 0.18 }
+    ]
+  },
+  {
+    "name": "DAX",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.026, "volatility": 0.14 },
+      { "year": 2015, "return": 0.095, "volatility": 0.18 },
+      { "year": 2016, "return": 0.068, "volatility": 0.16 },
+      { "year": 2017, "return": 0.126, "volatility": 0.09 },
+      { "year": 2018, "return": -0.184, "volatility": 0.15 },
+      { "year": 2019, "return": 0.254, "volatility": 0.13 },
+      { "year": 2020, "return": 0.036, "volatility": 0.28 },
+      { "year": 2021, "return": 0.158, "volatility": 0.13 },
+      { "year": 2022, "return": -0.124, "volatility": 0.20 },
+      { "year": 2023, "return": 0.202, "volatility": 0.12 },
+      { "year": 2024, "return": 0.189, "volatility": 0.11 }
+    ]
+  },
+  {
+    "name": "QQQ",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.172, "volatility": 0.11 },
+      { "year": 2015, "return": 0.085, "volatility": 0.14 },
+      { "year": 2016, "return": 0.068, "volatility": 0.13 },
+      { "year": 2017, "return": 0.324, "volatility": 0.09 },
+      { "year": 2018, "return": -0.011, "volatility": 0.19 },
+      { "year": 2019, "return": 0.388, "volatility": 0.14 },
+      { "year": 2020, "return": 0.484, "volatility": 0.30 },
+      { "year": 2021, "return": 0.269, "volatility": 0.16 },
+      { "year": 2022, "return": -0.328, "volatility": 0.28 },
+      { "year": 2023, "return": 0.547, "volatility": 0.17 },
+      { "year": 2024, "return": 0.278, "volatility": 0.15 }
+    ]
+  },
+  {
+    "name": "VTI",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.109, "volatility": 0.09 },
+      { "year": 2015, "return": -0.004, "volatility": 0.12 },
+      { "year": 2016, "return": 0.127, "volatility": 0.11 },
+      { "year": 2017, "return": 0.211, "volatility": 0.06 },
+      { "year": 2018, "return": -0.054, "volatility": 0.15 },
+      { "year": 2019, "return": 0.306, "volatility": 0.12 },
+      { "year": 2020, "return": 0.209, "volatility": 0.26 },
+      { "year": 2021, "return": 0.255, "volatility": 0.13 },
+      { "year": 2022, "return": -0.196, "volatility": 0.22 },
+      { "year": 2023, "return": 0.262, "volatility": 0.13 },
+      { "year": 2024, "return": 0.233, "volatility": 0.12 }
+    ]
+  },
+  {
+    "name": "Real Estate",
+    "category": "stocks",
+    "timeline": [
+      { "year": 2014, "return": 0.054, "volatility": 0.03 },
+      { "year": 2015, "return": 0.051, "volatility": 0.03 },
+      { "year": 2016, "return": 0.057, "volatility": 0.03 },
+      { "year": 2017, "return": 0.059, "volatility": 0.02 },
+      { "year": 2018, "return": 0.044, "volatility": 0.03 },
+      { "year": 2019, "return": 0.039, "volatility": 0.02 },
+      { "year": 2020, "return": 0.088, "volatility": 0.04 },
+      { "year": 2021, "return": 0.170, "volatility": 0.05 },
+      { "year": 2022, "return": 0.042, "volatility": 0.04 },
+      { "year": 2023, "return": -0.011, "volatility": 0.03 },
+      { "year": 2024, "return": 0.025, "volatility": 0.02 }
+    ]
+  },
+  {
+    "name": "Gold",
+    "category": "commodities",
+    "timeline": [
+      { "year": 2014, "return": -0.015, "volatility": 0.12 },
+      { "year": 2015, "return": -0.116, "volatility": 0.13 },
+      { "year": 2016, "return": 0.087, "volatility": 0.14 },
+      { "year": 2017, "return": 0.126, "volatility": 0.10 },
+      { "year": 2018, "return": -0.014, "volatility": 0.10 },
+      { "year": 2019, "return": 0.183, "volatility": 0.10 },
+      { "year": 2020, "return": 0.249, "volatility": 0.14 },
+      { "year": 2021, "return": -0.036, "volatility": 0.12 },
+      { "year": 2022, "return": -0.005, "volatility": 0.13 },
+      { "year": 2023, "return": 0.133, "volatility": 0.10 },
+      { "year": 2024, "return": 0.294, "volatility": 0.11 }
+    ]
+  },
+  {
+    "name": "Silver",
+    "category": "commodities",
+    "timeline": [
+      { "year": 2014, "return": -0.195, "volatility": 0.20 },
+      { "year": 2015, "return": -0.117, "volatility": 0.18 },
+      { "year": 2016, "return": 0.157, "volatility": 0.22 },
+      { "year": 2017, "return": 0.055, "volatility": 0.14 },
+      { "year": 2018, "return": -0.087, "volatility": 0.13 },
+      { "year": 2019, "return": 0.154, "volatility": 0.14 },
+      { "year": 2020, "return": 0.473, "volatility": 0.32 },
+      { "year": 2021, "return": -0.118, "volatility": 0.22 },
+      { "year": 2022, "return": 0.027, "volatility": 0.22 },
+      { "year": 2023, "return": 0.007, "volatility": 0.18 },
+      { "year": 2024, "return": 0.226, "volatility": 0.20 }
+    ]
+  },
+  {
+    "name": "WTI Oil",
+    "category": "commodities",
+    "timeline": [
+      { "year": 2014, "return": -0.459, "volatility": 0.28 },
+      { "year": 2015, "return": -0.305, "volatility": 0.35 },
+      { "year": 2016, "return": 0.452, "volatility": 0.32 },
+      { "year": 2017, "return": 0.126, "volatility": 0.22 },
+      { "year": 2018, "return": -0.249, "volatility": 0.30 },
+      { "year": 2019, "return": 0.342, "volatility": 0.28 },
+      { "year": 2020, "return": -0.208, "volatility": 0.72 },
+      { "year": 2021, "return": 0.550, "volatility": 0.35 },
+      { "year": 2022, "return": 0.067, "volatility": 0.40 },
+      { "year": 2023, "return": -0.109, "volatility": 0.28 },
+      { "year": 2024, "return": 0.005, "volatility": 0.22 }
+    ]
+  },
+  {
+    "name": "Copper",
+    "category": "commodities",
+    "timeline": [
+      { "year": 2014, "return": -0.140, "volatility": 0.15 },
+      { "year": 2015, "return": -0.260, "volatility": 0.18 },
+      { "year": 2016, "return": 0.173, "volatility": 0.16 },
+      { "year": 2017, "return": 0.314, "volatility": 0.14 },
+      { "year": 2018, "return": -0.178, "volatility": 0.15 },
+      { "year": 2019, "return": 0.065, "volatility": 0.12 },
+      { "year": 2020, "return": 0.259, "volatility": 0.22 },
+      { "year": 2021, "return": 0.255, "volatility": 0.18 },
+      { "year": 2022, "return": -0.140, "volatility": 0.20 },
+      { "year": 2023, "return": 0.018, "volatility": 0.14 },
+      { "year": 2024, "return": 0.047, "volatility": 0.15 }
+    ]
+  },
+  {
+    "name": "Natural Gas",
+    "category": "commodities",
+    "timeline": [
+      { "year": 2014, "return": -0.310, "volatility": 0.45 },
+      { "year": 2015, "return": -0.190, "volatility": 0.40 },
+      { "year": 2016, "return": 0.590, "volatility": 0.50 },
+      { "year": 2017, "return": -0.220, "volatility": 0.38 },
+      { "year": 2018, "return": -0.050, "volatility": 0.42 },
+      { "year": 2019, "return": -0.258, "volatility": 0.38 },
+      { "year": 2020, "return": 0.168, "volatility": 0.62 },
+      { "year": 2021, "return": 0.470, "volatility": 0.55 },
+      { "year": 2022, "return": -0.105, "volatility": 0.72 },
+      { "year": 2023, "return": -0.440, "volatility": 0.55 },
+      { "year": 2024, "return": -0.250, "volatility": 0.50 }
+    ]
+  }
+]
