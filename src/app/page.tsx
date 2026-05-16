@@ -1182,38 +1182,36 @@ export default function CryptoComparator() {
             <div className="bg-indigo-500/20 rounded-full p-3">
               <Building2 className="w-8 h-8 text-indigo-400" />
             </div>
-            <h3 className="text-2xl font-bold">Portfolio Builder</h3>
-            <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full font-bold">Coming Soon</span>
+            <h3 className="text-2xl font-bold">Portfolio Optimizer</h3>
           </div>
           <p className="text-gray-300 mb-6 max-w-3xl mx-auto">
-            Build and optimize your investment portfolio with Markowitz-inspired allocation tools.
+            Build and optimize your investment portfolio with Markowitz Modern Portfolio Theory.
             Visualize the efficient frontier and find the optimal risk-return balance for your goals.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-indigo-500/10 rounded-lg p-4 opacity-60">
+            <div className="bg-indigo-500/10 rounded-lg p-4">
               <div className="text-2xl mb-2">📊</div>
-              <h4 className="font-bold text-indigo-400 mb-2">Asset Allocation</h4>
-              <p className="text-sm text-gray-300">Drag sliders to set portfolio weights</p>
+              <h4 className="font-bold text-indigo-400 mb-2">Optimal Weights</h4>
+              <p className="text-sm text-gray-300">Find the best asset allocation</p>
             </div>
-            <div className="bg-purple-500/10 rounded-lg p-4 opacity-60">
+            <div className="bg-purple-500/10 rounded-lg p-4">
               <div className="text-2xl mb-2">📈</div>
               <h4 className="font-bold text-purple-400 mb-2">Efficient Frontier</h4>
               <p className="text-sm text-gray-300">Visualize optimal risk-return tradeoffs</p>
             </div>
-            <div className="bg-violet-500/10 rounded-lg p-4 opacity-60">
-              <div className="text-2xl mb-2">🔄</div>
-              <h4 className="font-bold text-violet-400 mb-2">Rebalancing</h4>
-              <p className="text-sm text-gray-300">Strategy suggestions for your portfolio</p>
+            <div className="bg-violet-500/10 rounded-lg p-4">
+              <div className="text-2xl mb-2">🎯</div>
+              <h4 className="font-bold text-violet-400 mb-2">Max Sharpe</h4>
+              <p className="text-sm text-gray-300">Maximize return per unit of risk</p>
             </div>
           </div>
-          <button
-            disabled
-            className="inline-flex items-center gap-2 bg-indigo-500/50 text-white font-bold py-3 px-8 rounded-lg cursor-not-allowed opacity-70"
+          <Link
+            href="/portfolio-optimizer"
+            className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg"
           >
             <Building2 className="w-5 h-5" />
-            Launch Portfolio Builder
-            <span className="text-xs px-2 py-0.5 bg-white/20 rounded ml-1">Final Version</span>
-          </button>
+            Launch Portfolio Optimizer
+          </Link>
         </div>
 
         <div className="flex justify-center mb-8">
