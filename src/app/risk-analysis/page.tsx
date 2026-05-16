@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { ArrowLeft, TrendingUp, Shield, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Shield, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
 import InfoTip from '../../components/Tooltip';
+import { calculateAdvancedMetrics, type AdvancedMetrics } from '../../lib/advancedMetrics';
 
 const CorrelationMatrix = dynamic(() => import('../../components/CorrelationMatrix'), { ssr: false });
 const RiskReturnScatter = dynamic(() => import('../../components/RiskReturnScatter'), { ssr: false });
@@ -24,11 +25,6 @@ interface MonthlyReturns {
   riskFree: number;
 }
 
-interface RiskMetrics {
-  sharpeRatio: number;
-  maxDrawdown: number;
-  volatility: number;
-}
 
 interface Investment {
   name: string;
@@ -40,7 +36,7 @@ interface Investment {
 
 export default function RiskAnalysis() {
   const [selectedAssets, setSelectedAssets] = useState<string[]>(['bitcoin', 'ethereum', 'sp500', 'gold']);
-  const [showAdvancedModal, setShowAdvancedModal] = useState(false);
+  const [expandedAsset, setExpandedAsset] = useState<string | null>(null);
 
   const monthlyReturnsData: Record<string, MonthlyReturns> = {
     "2020-01": { bitcoin: 30.05, ethereum: 40.31, solana: null, sp500: -0.18, nasdaq: 1.98, russell2000: -0.69, realEstate: 0.6, gold: 4.61, silver: 0.34, wtiOil: -5.8, riskFree: 1.52 },
@@ -183,61 +179,25 @@ export default function RiskAnalysis() {
     Object.values(monthlyReturnsData).forEach(month => {
       const value = month[asset as keyof MonthlyReturns];
       if (value !== null && value !== undefined) {
-        returns.push(value);
+        returns.push(value / 100);
       }
     });
     return returns;
   };
 
+  const getMarketReturns = (): number[] => {
+    return Object.values(monthlyReturnsData).map(month => month.sp500 / 100);
+  };
+
   const getRiskFreeRates = (): number[] => {
-    return Object.values(monthlyReturnsData).map(month => month.riskFree);
+    return Object.values(monthlyReturnsData).map(month => month.riskFree / 100);
   };
 
-  const calculateStandardDeviation = (returns: number[]): number => {
-    const mean = returns.reduce((sum, ret) => sum + ret, 0) / returns.length;
-    const variance = returns.reduce((sum, ret) => sum + Math.pow(ret - mean, 2), 0) / returns.length;
-    return Math.sqrt(variance * 12);
-  };
-
-  const calculateSharpeRatio = (returns: number[], riskFreeRates: number[]): number => {
-    const avgReturn = returns.reduce((sum, ret) => sum + ret, 0) / returns.length * 12;
-    const avgRiskFree = riskFreeRates.reduce((sum, rf) => sum + rf, 0) / riskFreeRates.length;
-    const volatility = calculateStandardDeviation(returns);
-    return volatility === 0 ? 0 : (avgReturn - avgRiskFree) / volatility;
-  };
-
-  const calculateMaxDrawdown = (returns: number[]): number => {
-    let peak = 0;
-    let maxDD = 0;
-    let cumulativeReturn = 0;
-
-    returns.forEach(ret => {
-      cumulativeReturn += ret;
-      if (cumulativeReturn > peak) {
-        peak = cumulativeReturn;
-      }
-      const drawdown = peak - cumulativeReturn;
-      if (drawdown > maxDD) {
-        maxDD = drawdown;
-      }
-    });
-
-    return maxDD;
-  };
-
-  const calculateRiskMetrics = (asset: string): RiskMetrics => {
+  const getFullMetrics = (asset: string): AdvancedMetrics => {
     const returns = getAssetReturns(asset);
+    const marketReturns = getMarketReturns();
     const riskFreeRates = getRiskFreeRates();
-
-    if (returns.length === 0) {
-      return { sharpeRatio: 0, maxDrawdown: 0, volatility: 0 };
-    }
-
-    return {
-      sharpeRatio: calculateSharpeRatio(returns, riskFreeRates),
-      maxDrawdown: calculateMaxDrawdown(returns),
-      volatility: calculateStandardDeviation(returns),
-    };
+    return calculateAdvancedMetrics(returns, marketReturns, riskFreeRates);
   };
 
   const getRiskLevel = (volatility: number): { level: string; color: string } => {
@@ -319,9 +279,10 @@ export default function RiskAnalysis() {
           {selectedAssets.map(assetSymbol => {
             const investment = investments.find(inv => inv.symbol === assetSymbol);
             if (!investment) return null;
-            const metrics = calculateRiskMetrics(assetSymbol);
+            const metrics = getFullMetrics(assetSymbol);
             const riskLevel = getRiskLevel(metrics.volatility);
             const badgeClasses = getRiskBadgeClasses(metrics.volatility);
+            const isExpanded = expandedAsset === assetSymbol;
 
             return (
               <div key={assetSymbol} className="p-5 rounded-xl border border-white/10 bg-white/5">
@@ -334,26 +295,80 @@ export default function RiskAnalysis() {
                     {riskLevel.level}
                   </span>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm"><InfoTip text="How much the price swings. Lower = more stable.">Volatility</InfoTip></span>
-                    <span className={`font-mono font-medium ${riskLevel.color}`}>
-                      {metrics.volatility.toFixed(1)}%
-                    </span>
+                    <span className="text-gray-400 text-sm"><InfoTip text="Annualized standard deviation. Lower = more stable.">Volatility</InfoTip></span>
+                    <span className={`font-mono font-medium ${riskLevel.color}`}>{metrics.volatility.toFixed(1)}%</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm"><InfoTip text="Return per unit of risk. Above 1 is good, above 2 is excellent.">Sharpe Ratio</InfoTip></span>
-                    <span className={`font-mono font-medium ${metrics.sharpeRatio >= 1 ? 'text-green-400' : metrics.sharpeRatio >= 0.5 ? 'text-yellow-400' : 'text-red-400'}`}>
-                      {metrics.sharpeRatio.toFixed(2)}
-                    </span>
+                    <span className="text-gray-400 text-sm"><InfoTip text="Return per unit of risk. Above 1 is good, above 2 is excellent.">Sharpe</InfoTip></span>
+                    <span className={`font-mono font-medium ${metrics.sharpeRatio >= 1 ? 'text-green-400' : metrics.sharpeRatio >= 0.5 ? 'text-yellow-400' : 'text-red-400'}`}>{metrics.sharpeRatio.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm"><InfoTip text="Worst drop from peak. Lower is better.">Max Drawdown</InfoTip></span>
-                    <span className="font-mono font-medium text-red-400">
-                      -{metrics.maxDrawdown.toFixed(1)}%
-                    </span>
+                    <span className="text-gray-400 text-sm"><InfoTip text="Like Sharpe but only penalizes downside risk. Higher = better risk-adjusted returns.">Sortino</InfoTip></span>
+                    <span className={`font-mono font-medium ${metrics.sortinoRatio >= 1.5 ? 'text-green-400' : metrics.sortinoRatio >= 0.5 ? 'text-yellow-400' : 'text-red-400'}`}>{metrics.sortinoRatio.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400 text-sm"><InfoTip text="Worst peak-to-trough decline.">Max Drawdown</InfoTip></span>
+                    <span className="font-mono font-medium text-red-400">-{metrics.maxDrawdown.toFixed(1)}%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400 text-sm"><InfoTip text="Sensitivity to market (S&P 500). Beta=1 moves with market, >1 amplifies, <1 dampens.">Beta</InfoTip></span>
+                    <span className={`font-mono font-medium ${metrics.beta >= 0.8 && metrics.beta <= 1.2 ? 'text-blue-400' : metrics.beta < 0.8 ? 'text-green-400' : 'text-orange-400'}`}>{metrics.beta.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400 text-sm"><InfoTip text="Excess return vs market after adjusting for beta. Positive = outperforming.">Alpha</InfoTip></span>
+                    <span className={`font-mono font-medium ${metrics.alpha >= 0 ? 'text-green-400' : 'text-red-400'}`}>{metrics.alpha >= 0 ? '+' : ''}{metrics.alpha.toFixed(1)}%</span>
                   </div>
                 </div>
+
+                {isExpanded && (
+                  <div className="mt-3 pt-3 border-t border-white/10 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Return divided by max drawdown. Higher = better recovery ability.">Calmar</InfoTip></span>
+                      <span className={`font-mono font-medium ${metrics.calmarRatio >= 1 ? 'text-green-400' : 'text-yellow-400'}`}>{metrics.calmarRatio.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Standard deviation of negative returns only. Lower = less downside risk.">Downside Dev</InfoTip></span>
+                      <span className="font-mono font-medium text-gray-300">{metrics.downsideDeviation.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Percentage of months with positive returns.">Win Rate</InfoTip></span>
+                      <span className={`font-mono font-medium ${metrics.winRate >= 55 ? 'text-green-400' : metrics.winRate >= 45 ? 'text-yellow-400' : 'text-red-400'}`}>{metrics.winRate.toFixed(0)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Maximum expected monthly loss at 95% confidence. 5% chance of losing more.">VaR (95%)</InfoTip></span>
+                      <span className="font-mono font-medium text-red-400">-{metrics.var95.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Expected loss in the worst 5% of months. Worse than VaR - the tail risk.">CVaR</InfoTip></span>
+                      <span className="font-mono font-medium text-red-400">-{metrics.cvar95.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Return per unit of systematic (market) risk. Like Sharpe but uses beta instead of total volatility.">Treynor</InfoTip></span>
+                      <span className={`font-mono font-medium ${metrics.treynorRatio >= 0 ? 'text-green-400' : 'text-red-400'}`}>{metrics.treynorRatio.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="Active return per unit of tracking error vs benchmark. Higher = more consistent outperformance.">Info Ratio</InfoTip></span>
+                      <span className={`font-mono font-medium ${metrics.informationRatio >= 0.5 ? 'text-green-400' : metrics.informationRatio >= 0 ? 'text-yellow-400' : 'text-red-400'}`}>{metrics.informationRatio.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="How much of the market's gains the asset captures when market is up. Above 100% = amplifies gains.">Upside Cap.</InfoTip></span>
+                      <span className={`font-mono font-medium ${metrics.upsideCapture >= 100 ? 'text-green-400' : 'text-yellow-400'}`}>{metrics.upsideCapture.toFixed(0)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400 text-sm"><InfoTip text="How much of the market's losses the asset absorbs when market is down. Below 100% = defensive.">Downside Cap.</InfoTip></span>
+                      <span className={`font-mono font-medium ${metrics.downsideCapture <= 100 ? 'text-green-400' : 'text-red-400'}`}>{metrics.downsideCapture.toFixed(0)}%</span>
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setExpandedAsset(isExpanded ? null : assetSymbol)}
+                  className="mt-3 w-full flex items-center justify-center gap-1 text-xs text-gray-500 hover:text-gray-300 transition-colors py-1"
+                >
+                  {isExpanded ? <><ChevronUp className="w-3 h-3" /> Less</> : <><ChevronDown className="w-3 h-3" /> All 15 metrics</>}
+                </button>
               </div>
             );
           })}
@@ -368,62 +383,6 @@ export default function RiskAnalysis() {
           <h3 className="text-lg font-bold mb-4"><InfoTip text="Each point is an asset. X-axis = risk (volatility), Y-axis = average monthly return. Bigger points have better Sharpe ratios (more return per unit of risk). Ideal assets are top-left: high return, low risk.">Risk-Return Analysis</InfoTip></h3>
           <RiskReturnScatter />
         </div>
-
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-indigo-400" />
-              <h3 className="text-lg font-bold">Advanced Metrics (15+ Indicators)</h3>
-            </div>
-            <span className="text-xs px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded-full font-bold">Final Version</span>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-            {['Sortino Ratio', 'Value at Risk (VaR)', 'Calmar Ratio', 'Beta', 'Alpha', 'Treynor Ratio', 'Information Ratio', 'Downside Deviation', 'Best/Worst Month', 'Correlation Analysis', 'Risk-Return Scatter', 'Portfolio Optimization'].map((metric) => (
-              <div key={metric} className="bg-white/5 rounded-lg px-3 py-2 text-center opacity-60">
-                <span className="text-xs text-gray-400">{metric}</span>
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
-            <button
-              onClick={() => setShowAdvancedModal(true)}
-              className="inline-flex items-center gap-2 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-400 font-medium py-2 px-6 rounded-lg border border-indigo-500/30 transition-all text-sm"
-            >
-              <Shield className="w-4 h-4" />
-              Preview Advanced Metrics
-            </button>
-          </div>
-        </div>
-
-        {showAdvancedModal && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setShowAdvancedModal(false)}>
-            <div className="bg-slate-800 border border-white/20 rounded-2xl p-8 max-w-lg mx-4" onClick={(e) => e.stopPropagation()}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-indigo-500/20 rounded-full p-2">
-                  <Shield className="w-6 h-6 text-indigo-400" />
-                </div>
-                <h3 className="text-xl font-bold">Professional Risk Analysis</h3>
-              </div>
-              <p className="text-gray-300 mb-4">
-                The final version will include a complete professional-grade risk analysis suite with 15+ institutional metrics:
-              </p>
-              <div className="grid grid-cols-2 gap-2 mb-6">
-                {['Sortino Ratio', 'Value at Risk (95%)', 'Calmar Ratio', 'Beta Analysis', 'Alpha Generation', 'Treynor Ratio', 'Information Ratio', 'Downside Deviation', 'Risk-Return Scatter Plot', 'Dynamic Correlation Matrix', 'Portfolio Diversification', 'Efficient Frontier'].map((m) => (
-                  <div key={m} className="flex items-center gap-2 text-sm text-gray-400">
-                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div>
-                    {m}
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={() => setShowAdvancedModal(false)}
-                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2.5 rounded-lg transition-all"
-              >
-                Got It — See You at the Final Presentation
-              </button>
-            </div>
-          </div>
-        )}
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link href="/comparison" className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium">
