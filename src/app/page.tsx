@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle } from 'lucide-react';
+import { DollarSign, Home, Coins, Fuel, Shield, Activity, Building2, Calculator, AlertTriangle, Download, Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import InfoTip from '../components/Tooltip';
 import GuidedTour from '../components/GuidedTour';
 import HelpModal from '../components/HelpModal';
+import { generatePDF } from '../lib/pdfExport';
 
 const HistoricalEvents = dynamic(() => import('../components/HistoricalEvents'), { ssr: false });
 
@@ -56,6 +57,7 @@ export default function CryptoComparator() {
   const [runTour, setRunTour] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showEvents, setShowEvents] = useState(true);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !localStorage.getItem('tour-completed')) {
@@ -359,6 +361,40 @@ export default function CryptoComparator() {
     const text = calculatePeriodReturn(assetKey);
     if (text === 'N/A' || text.startsWith('-')) return 'text-red-400';
     return 'text-green-400';
+  };
+
+  const handleExportPDF = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const chartElement = document.querySelector('#tour-chart .recharts-wrapper') as HTMLElement | null;
+      const periodLabel = selectedPeriod === '1y' ? '1 Year' : selectedPeriod === '5y' ? '5 Years' : '10 Years';
+
+      const assetMetrics = selectedInvestments.map(symbol => {
+        const inv = investments.find(i => i.symbol === symbol);
+        const finalValue = calculateFinalValue(symbol);
+        const profit = finalValue - initialInvestment;
+        const returnPct = ((finalValue - initialInvestment) / initialInvestment) * 100;
+        return {
+          name: inv?.name || symbol,
+          symbol,
+          finalValue,
+          profit,
+          returnPct,
+          volatility: inv?.volatility || 0,
+          category: inv?.category || 'traditional',
+        };
+      });
+
+      await generatePDF({
+        assets: assetMetrics,
+        period: periodLabel,
+        investment: initialInvestment,
+        chartElement,
+        generatedDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   return (
@@ -1216,12 +1252,21 @@ export default function CryptoComparator() {
 
         <div className="flex justify-center mb-8">
           <button
-            onClick={() => alert('PDF export feature in development — Coming in final presentation!')}
-            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-gray-300 font-medium py-2.5 px-6 rounded-lg border border-white/20 transition-all text-sm"
+            onClick={handleExportPDF}
+            disabled={isGeneratingPDF}
+            className="inline-flex items-center gap-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 font-medium py-2.5 px-6 rounded-lg border border-blue-500/30 transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <DollarSign className="w-4 h-4" />
-            Export Analysis to PDF
-            <span className="text-xs px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">Beta</span>
+            {isGeneratingPDF ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Generating PDF...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                Download PDF Report
+              </>
+            )}
           </button>
         </div>
 
