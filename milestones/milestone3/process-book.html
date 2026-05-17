@@ -13,7 +13,8 @@
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       line-height: 1.6;
-      color: #1e293b;
+      color: #e2e8f0;
+      background: #0f172a;
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
@@ -23,7 +24,7 @@
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 10px;
-      color: #0f172a;
+      color: #f1f5f9;
       border-bottom: 3px solid #3b82f6;
       padding-bottom: 10px;
     }
@@ -33,7 +34,7 @@
       font-weight: 600;
       margin-top: 30px;
       margin-bottom: 15px;
-      color: #1e293b;
+      color: #f1f5f9;
     }
 
     h3 {
@@ -41,7 +42,7 @@
       font-weight: 600;
       margin-top: 20px;
       margin-bottom: 10px;
-      color: #334155;
+      color: #cbd5e1;
     }
 
     p {
@@ -49,45 +50,54 @@
       text-align: justify;
     }
 
+    a {
+      color: #60a5fa;
+    }
+
     .cover {
       text-align: center;
       padding: 60px 0;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid #1e293b;
       margin-bottom: 40px;
     }
 
     .cover h1 {
       font-size: 36px;
       border: none;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .cover .subtitle {
       font-size: 18px;
-      color: #64748b;
+      color: #94a3b8;
       margin-bottom: 30px;
     }
 
     .cover .team {
       font-size: 14px;
-      color: #475569;
+      color: #94a3b8;
       margin-bottom: 10px;
     }
 
     .screenshot {
       width: 100%;
       max-width: 700px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #334155;
       border-radius: 8px;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     }
 
     .caption {
       font-size: 13px;
-      color: #64748b;
+      color: #94a3b8;
       text-align: center;
-      margin-top: -15px;
+      margin-top: -12px;
       margin-bottom: 20px;
       font-style: italic;
     }
@@ -100,10 +110,10 @@
     }
 
     .viz-card {
-      border: 1px solid #e2e8f0;
+      border: 1px solid #334155;
       border-radius: 8px;
       padding: 15px;
-      background: #f8fafc;
+      background: #1e293b;
       margin-bottom: 20px;
     }
 
@@ -111,7 +121,7 @@
       font-size: 15px;
       font-weight: 600;
       margin-bottom: 8px;
-      color: #1e293b;
+      color: #f1f5f9;
     }
 
     .viz-card p {
@@ -142,7 +152,7 @@
     }
 
     .highlight-box {
-      background: #eff6ff;
+      background: #1e293b;
       border-left: 4px solid #3b82f6;
       padding: 15px;
       margin: 20px 0;
@@ -154,7 +164,7 @@
     }
 
     .ai-section {
-      background: #fef3c7;
+      background: #1e293b;
       border-left: 4px solid #f59e0b;
       padding: 15px;
       margin: 20px 0;
@@ -168,21 +178,26 @@
     }
 
     th, td {
-      border: 1px solid #e2e8f0;
+      border: 1px solid #334155;
       padding: 10px;
       text-align: left;
       font-size: 13px;
     }
 
     th {
-      background: #f1f5f9;
+      background: #1e293b;
       font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    td {
+      background: #0f172a;
     }
 
     .footer {
       margin-top: 40px;
       padding-top: 20px;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid #1e293b;
       text-align: center;
       font-size: 12px;
       color: #64748b;
@@ -196,14 +211,23 @@
     }
 
     .tech-item {
-      background: #f1f5f9;
+      background: #1e293b;
       padding: 8px 12px;
       border-radius: 6px;
       font-size: 13px;
+      border: 1px solid #334155;
     }
 
     .tech-item strong {
-      color: #3b82f6;
+      color: #60a5fa;
+    }
+
+    code {
+      background: #1e293b;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #7dd3fc;
     }
   </style>
 </head>
@@ -233,6 +257,9 @@ Our target audience&mdash;university students, beginner investors, and finance e
 <p>
 The tool goes beyond simple price comparison by incorporating educational elements (tooltips, guided tours, help sections), advanced risk metrics (15+ professional indicators), portfolio optimization (Markowitz efficient frontier), and temporal analysis (animated evolution timeline). Users can answer questions like &ldquo;Is crypto worth the risk compared to gold, stocks, and real estate?&rdquo; through hands-on exploration rather than passive consumption of financial advice.
 </p>
+
+<img src="screenshots/main-comparator.png" alt="Main Comparator Dashboard" class="screenshot">
+<div class="caption">Figure 1: Main investment comparator with normalized performance chart and asset selection</div>
 
 <div class="page-break"></div>
 
@@ -339,6 +366,9 @@ The project features six custom D3.js visualizations, each designed to reveal di
   <p><strong>Course Concepts:</strong> Storytelling with data (Lecture 12), D3.js transitions (Lecture 4), Interaction techniques (Lecture 5)</p>
 </div>
 
+<img src="screenshots/asset-evolution.png" alt="Asset Evolution Timeline" class="screenshot">
+<div class="caption">Figure 2: Animated Asset Evolution Timeline showing bubble positions for a given year</div>
+
 <h3>2. Efficient Frontier (Portfolio Optimizer)</h3>
 
 <div class="viz-card">
@@ -355,6 +385,9 @@ The project features six custom D3.js visualizations, each designed to reveal di
   <p><strong>Design Challenge:</strong> Without a QP solver library, we used Monte Carlo + directed sampling (30% biased toward concentrated portfolios) to adequately explore the feasible set. Results match analytical solutions within 2%.</p>
   <p><strong>Course Concepts:</strong> Position encoding (Lecture 6), Design principles (Lecture 7), Selection/filtering (Lecture 5)</p>
 </div>
+
+<img src="screenshots/portfolio-optimizer.png" alt="Portfolio Optimizer" class="screenshot">
+<div class="caption">Figure 3: Efficient Frontier with Monte Carlo simulation and optimal portfolio markers</div>
 
 <div class="page-break"></div>
 
@@ -374,6 +407,9 @@ The project features six custom D3.js visualizations, each designed to reveal di
   <p><strong>Design Rationale:</strong> Quadrant lines at median risk/return divide chart into four zones (Low Risk High Return being optimal). Point size encodes Sharpe Ratio, allowing users to identify efficiently-priced assets at a glance.</p>
   <p><strong>Course Concepts:</strong> Zoom/pan/Voronoi (Lecture 5), Size/position encoding (Lecture 6), Scatterplot design (Lecture 11)</p>
 </div>
+
+<img src="screenshots/risk-return-scatter.png" alt="Risk-Return Scatter Plot" class="screenshot">
+<div class="caption">Figure 4: Risk-Return Scatter Plot with convex hulls showing category boundaries</div>
 
 <h3>4. Historical Events with Impact Zones</h3>
 
@@ -405,6 +441,9 @@ The project features six custom D3.js visualizations, each designed to reveal di
     <p>Recharts LineChart comparing total invested (dashed) vs portfolio value (solid) over time for any of 21 assets. Shows power of dollar-cost averaging across 60 months of real price data.</p>
   </div>
 </div>
+
+<img src="screenshots/dca-calculator.png" alt="DCA Calculator" class="screenshot">
+<div class="caption">Figure 5: DCA Calculator showing investment growth vs total contributed for selected assets</div>
 
 <div class="page-break"></div>
 

@@ -9,9 +9,9 @@ async function generatePDF() {
   const page = await browser.newPage();
 
   const htmlPath = path.join(__dirname, '../milestones/milestone3/process-book.html');
-  const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+  const fileUrl = 'file://' + htmlPath;
 
-  await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+  await page.goto(fileUrl, { waitUntil: 'networkidle0' });
 
   const pdfPath = path.join(__dirname, '../milestones/milestone3/process-book.pdf');
 
