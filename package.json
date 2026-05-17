@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-pdf": "node scripts/generate-pdf.js"
   },
   "dependencies": {
     "@types/d3": "^7.4.3",
@@ -28,6 +29,7 @@
     "@types/react-dom": "^19.1.7",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "puppeteer": "^25.0.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
